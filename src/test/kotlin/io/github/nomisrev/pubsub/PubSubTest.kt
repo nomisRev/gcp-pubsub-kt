@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toSet
 import arrow.fx.coroutines.Resource
+import kotlinx.coroutines.flow.map
 
 class PubSubTest : StringSpec({
 
@@ -86,8 +87,9 @@ class PubSubTest : StringSpec({
         subscriptionId,
         credentials,
         channel
-      ) { msg ->
+      ).map {  msg ->
         msg.data.toStringUtf8()
+          .also { msg.ack() }
       }.take(3).toSet() shouldBe messages
     }
   }
@@ -113,8 +115,9 @@ class PubSubTest : StringSpec({
         subscriptionId,
         credentials,
         channel
-      ) { msg ->
+      ).map { msg ->
         msg.data.toStringUtf8()
+          .also { msg.ack() }
       } // Receiving messages in order is not guaranteed unless you send message to the same region
         // With setEnableMessageOrdering enabled
         // https://cloud.google.com/pubsub/docs/publisher#using_ordering_keys

@@ -29,6 +29,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.channels.trySendBlocking
 
 object GcpPubSub {
 
@@ -87,35 +89,23 @@ object GcpPubSub {
 
   /**
    * Basic implementation to subscribe to Google PubSub.
-   * `A` is offloaded into an **unbounded** [Channel], which means that there is no backpressure guarantee.
+   * `A` is offloaded into a [Channel]
    * To deal with backpressure you can provide [FlowControlSettings] which allows limiting how many messages subscribers pull.
    * You can limit both the number of messages and the maximum size of messages held by the client at one time, so as to not overburden a single client.
    */
-  fun <A> subscribe(
-    projectId: String,
-    subscriptionId: String,
-    credentialsProvider: CredentialsProvider? = null,
-    channelProvider: TransportChannelProvider? = null,
-    flowControlSettings: FlowControlSettings? = null,
-    decode: suspend (PubsubMessage) -> A,
-  ): Flow<A> =
-    subscribe(projectId, subscriptionId, credentialsProvider, channelProvider, flowControlSettings).map(decode)
-
   fun subscribe(
     projectId: String,
     subscriptionId: String,
     credentialsProvider: CredentialsProvider? = null,
     channelProvider: TransportChannelProvider? = null,
     flowControlSettings: FlowControlSettings? = null
-  ): Flow<PubsubMessage> =
+  ): Flow<PubsubRecord> =
     channelFlow {
       val subscriptionName = ProjectSubscriptionName.of(projectId, subscriptionId)
       // Create Subscriber for projectId & subscriptionId
       val subscriber = Subscriber.newBuilder(subscriptionName) { message: PubsubMessage, consumer: AckReplyConsumer ->
-        launch {
-          send(message)
-          consumer.ack() // Ack receiving message
-        }
+        // Block the upstream when Channel cannot keep up with messages
+        trySendBlocking(PubsubRecord(message, consumer))
       }.apply {
         channelProvider?.let(this::setChannelProvider)
         credentialsProvider?.let(this::setCredentialsProvider)
