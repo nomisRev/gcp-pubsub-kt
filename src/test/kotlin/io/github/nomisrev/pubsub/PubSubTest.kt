@@ -9,11 +9,9 @@ import org.testcontainers.containers.PubSubEmulatorContainer
 import org.testcontainers.utility.DockerImageName
 import com.google.api.gax.core.NoCredentialsProvider
 import com.google.api.gax.rpc.TransportChannelProvider
-import com.google.cloud.pubsub.v1.Publisher
 import com.google.cloud.pubsub.v1.TopicAdminSettings
 import com.google.cloud.pubsub.v1.SubscriptionAdminSettings
 import com.google.protobuf.ByteString
-import com.google.pubsub.v1.TopicName
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.take
@@ -56,16 +54,6 @@ class PubSubTest : StringSpec({
     .setCredentialsProvider(credentials)
     .build()
 
-  fun publisher(
-    projectId: String,
-    topicId: String,
-    channel: TransportChannelProvider,
-    credentials: CredentialsProvider
-  ): Publisher = Publisher.newBuilder(TopicName.of(projectId, topicId))
-    .setChannelProvider(channel)
-    .setCredentialsProvider(credentials)
-    .build()
-
   "publish multiple messages" {
     val messages = setOf("first-message", "second-message", "third-message")
     managedChannel().use { channel ->
@@ -78,16 +66,19 @@ class PubSubTest : StringSpec({
       GcpPubSub.publish(
         messages.map(ByteString::copyFromUtf8).asFlow(),
         projectId,
-        topicId,
-        publisher(projectId, topicId, channel, credentials)
-      )
+        topicId
+      ) {
+        setChannelProvider(channel)
+        setCredentialsProvider(credentials)
+      }
 
       GcpPubSub.subscribe(
         projectId,
         subscriptionId,
-        credentials,
-        channel
-      ).map {  msg ->
+      ) {
+        setChannelProvider(channel)
+        setCredentialsProvider(credentials)
+      }.map { msg ->
         msg.data.toStringUtf8()
           .also { msg.ack() }
       }.take(3).toSet() shouldBe messages
@@ -106,16 +97,19 @@ class PubSubTest : StringSpec({
       GcpPubSub.publish(
         messages.map(ByteString::copyFromUtf8).asFlow(),
         projectId,
-        topicId,
-        publisher(projectId, topicId, channel, credentials)
-      )
+        topicId
+      ) {
+        setChannelProvider(channel)
+        setCredentialsProvider(credentials)
+      }
 
       GcpPubSub.subscribe(
         projectId,
-        subscriptionId,
-        credentials,
-        channel
-      ).map { msg ->
+        subscriptionId
+      ) {
+        setChannelProvider(channel)
+        setCredentialsProvider(credentials)
+      }.map { msg ->
         msg.data.toStringUtf8()
           .also { msg.ack() }
       } // Receiving messages in order is not guaranteed unless you send message to the same region

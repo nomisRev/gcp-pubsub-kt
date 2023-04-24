@@ -2,8 +2,6 @@ package io.github.nomisrev.pubsub
 
 import com.google.api.core.ApiFutures
 import com.google.api.gax.batching.FlowControlSettings
-import com.google.api.gax.core.CredentialsProvider
-import com.google.api.gax.rpc.TransportChannelProvider
 import com.google.cloud.pubsub.v1.AckReplyConsumer
 import com.google.cloud.pubsub.v1.Publisher
 import com.google.cloud.pubsub.v1.Subscriber
@@ -25,11 +23,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runInterruptible
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.trySendBlocking
 
 object GcpPubSub {
@@ -96,21 +92,15 @@ object GcpPubSub {
   fun subscribe(
     projectId: String,
     subscriptionId: String,
-    credentialsProvider: CredentialsProvider? = null,
-    channelProvider: TransportChannelProvider? = null,
-    flowControlSettings: FlowControlSettings? = null
+    configure: Subscriber.Builder.() -> Unit = {},
   ): Flow<PubsubRecord> =
     channelFlow {
       val subscriptionName = ProjectSubscriptionName.of(projectId, subscriptionId)
       // Create Subscriber for projectId & subscriptionId
-      val subscriber = Subscriber.newBuilder(subscriptionName) { message: PubsubMessage, consumer: AckReplyConsumer ->
+      val subscriber = Subscriber.newBuilder(subscriptionName, ) { message: PubsubMessage, consumer: AckReplyConsumer ->
         // Block the upstream when Channel cannot keep up with messages
         trySendBlocking(PubsubRecord(message, consumer))
-      }.apply {
-        channelProvider?.let(this::setChannelProvider)
-        credentialsProvider?.let(this::setCredentialsProvider)
-        flowControlSettings?.let(this::setFlowControlSettings)
-      }.build()
+      }.apply(configure).build()
 
       subscriber.startAsync()
       awaitClose { subscriber.stopAsync() }
@@ -127,9 +117,9 @@ object GcpPubSub {
     projectId: String,
     topicId: String,
     encode: suspend (A) -> ByteString,
-    publisher: Publisher? = null
+    configure: Publisher.Builder.() -> Unit = {},
   ): Unit =
-    publish(messages.map(encode), projectId, topicId, publisher)
+    publish(messages.map(encode), projectId, topicId, configure = configure)
 
   /**
    * Publishes a stream of message [String] to a certain [projectId] and [topicId].
@@ -142,16 +132,15 @@ object GcpPubSub {
     messages: Flow<ByteString>,
     projectId: String,
     topicId: String,
-    publisher: Publisher? = null,
-    context: CoroutineContext = Dispatchers.IO
+    context: CoroutineContext = Dispatchers.IO,
+    configure: Publisher.Builder.() -> Unit = {},
   ): Unit {
-    // Create publisher for projectId & topicId
-    val topicName = ProjectTopicName.of(projectId, topicId)
-
-    @Suppress("NAME_SHADOWING")
-    val publisher = publisher ?: withContext(context) {
-      Publisher.newBuilder(topicName).build()
+    val publisher = withContext(context) {
+      Publisher.newBuilder(ProjectTopicName.of(projectId, topicId))
+        .apply(configure)
+        .build()
     }
+
     // Create messages and publish them
     val futures = messages
       .map {
@@ -175,16 +164,15 @@ object GcpPubSub {
     messages: Flow<ByteString>,
     projectId: String,
     topicId: String,
-    publisher: Publisher? = null,
-    context: CoroutineContext = Dispatchers.IO
+    context: CoroutineContext = Dispatchers.IO,
+    configure: Publisher.Builder.() -> Unit = {},
   ): Unit {
-    // Create publisher for projectId & topicId
-    val topicName = ProjectTopicName.of(projectId, topicId)
-
-    @Suppress("NAME_SHADOWING")
-    val publisher = publisher ?: withContext(context) {
-      Publisher.newBuilder(topicName).build()
+    val publisher = withContext(context) {
+      Publisher.newBuilder(ProjectTopicName.of(projectId, topicId))
+        .apply(configure)
+        .build()
     }
+
     try {
       // Create messages and publish them
       messages.collect { bytes ->
