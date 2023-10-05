@@ -8,3 +8,7 @@ plugins {
   alias(libs.plugins.knit)
   alias(libs.plugins.spotless)
 }
+
+repositories {
+  mavenCentral()
+}

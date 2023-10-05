@@ -1,6 +1,5 @@
 package io.github.nomisrev.gcp.pubsub
 
-import com.google.api.gax.core.CredentialsProvider
 import com.google.api.gax.rpc.AlreadyExistsException
 import com.google.api.gax.rpc.ApiException
 import com.google.api.gax.rpc.InvalidArgumentException
@@ -22,18 +21,16 @@ import io.github.nomisrev.gcp.core.await
 
 public fun GcpPubsSubAdmin(
   projectId: ProjectId,
-  credentialsProvider: CredentialsProvider
+  configureSubscriptionAdmin: SubscriptionAdminSettings.Builder.() -> Unit,
+  configureTopicAdmin: TopicAdminSettings.Builder.() -> Unit
 ): GcpPubsSubAdmin {
-  //  require(projectId.value.isNotBlank()) { "The project ID can't be null or empty." }
   val topicAdminClient =
-    TopicAdminClient.create(
-      TopicAdminSettings.newBuilder().setCredentialsProvider(credentialsProvider).build()
-    )
+    TopicAdminClient.create(TopicAdminSettings.newBuilder().apply(configureTopicAdmin).build())
 
   val subscriptionAdminClient =
     try {
       SubscriptionAdminClient.create(
-        SubscriptionAdminSettings.newBuilder().setCredentialsProvider(credentialsProvider).build()
+        SubscriptionAdminSettings.newBuilder().apply(configureSubscriptionAdmin).build()
       )
     } catch (ex: Exception) {
       topicAdminClient.close()
@@ -111,12 +108,11 @@ public interface GcpPubsSubAdmin : AutoCloseable {
   /**
    * Get the configuration of a Google Cloud Pub/Sub subscription.
    *
-   * @param subscriptionName short subscription name, e.g., "subscriptionName", or the
-   *   fully-qualified subscription name in the
-   *   `projects/{project_name}/subscriptions/{subscription_name}` format
+   * @param subscriptionId short subscription name, e.g., "subscriptionId", or the fully-qualified
+   *   subscription name in the `projects/{project_name}/subscriptions/{subscription_name}` format
    * @return subscription configuration or `null` if subscription doesn't exist
    */
-  public suspend fun getSubscription(subscriptionName: SubscriptionId): Subscription?
+  public suspend fun getSubscription(subscriptionId: SubscriptionId): Subscription?
 
   public suspend fun listSubscriptions(): List<Subscription>
 }
@@ -130,9 +126,7 @@ private class DefaultPubSubAdmin(
   override suspend fun createTopic(topicId: TopicId): Topic {
     return topicAdminClient
       .createTopicCallable()
-      .futureCall(
-        Topic.newBuilder().setName(topicName(topicId.value, projectId.value).toString()).build()
-      )
+      .futureCall(Topic.newBuilder().setName(topicId.toTopicName(projectId).toString()).build())
       .await()
   }
 
@@ -140,9 +134,7 @@ private class DefaultPubSubAdmin(
     topicAdminClient
       .deleteTopicCallable()
       .futureCall(
-        DeleteTopicRequest.newBuilder()
-          .setTopic(topicName(topicId.value, projectId.value).toString())
-          .build()
+        DeleteTopicRequest.newBuilder().setTopic(topicId.toTopicName(projectId).toString()).build()
       )
       .await()
   }
@@ -152,9 +144,7 @@ private class DefaultPubSubAdmin(
     return try {
       topicAdminClient.topicCallable
         .futureCall(
-          GetTopicRequest.newBuilder()
-            .setTopic(topicName(topicId.value, projectId.value).toString())
-            .build()
+          GetTopicRequest.newBuilder().setTopic(topicId.toTopicName(projectId).toString()).build()
         )
         .await()
     } catch (aex: ApiException) {
@@ -173,39 +163,36 @@ private class DefaultPubSubAdmin(
     subscriptionId: SubscriptionId,
     topicId: TopicId,
     configure: Subscription.Builder.() -> Unit
-  ): Subscription {
-    val topicName = topicName(topicId.value, projectId.value)
-    val subscriptionName = subscriptionName(subscriptionId.value, projectId.value)
-    return subscriptionAdminClient
+  ): Subscription =
+    subscriptionAdminClient
       .createSubscriptionCallable()
       .futureCall(
         Subscription.newBuilder()
-          .setTopic(topicName.toString())
-          .setName(subscriptionName.toString())
+          .setTopic(topicId.toTopicName(projectId).toString())
+          .setName(subscriptionId.toSubscriptionName(projectId).toString())
           .apply(configure)
           .build()
       )
       .await()
-  }
 
   override suspend fun deleteSubscription(subscriptionId: SubscriptionId) {
     subscriptionAdminClient
       .deleteSubscriptionCallable()
       .futureCall(
         DeleteSubscriptionRequest.newBuilder()
-          .setSubscription(subscriptionName(subscriptionId.value, projectId.value).toString())
+          .setSubscription(subscriptionId.toSubscriptionName(projectId).toString())
           .build()
       )
       .await()
   }
 
-  override suspend fun getSubscription(subscriptionName: SubscriptionId): Subscription? {
-    require(subscriptionName.value.isNotEmpty()) { "No subscription name was specified" }
+  override suspend fun getSubscription(subscriptionId: SubscriptionId): Subscription? {
+    require(subscriptionId.value.isNotEmpty()) { "No subscription name was specified" }
     return try {
       subscriptionAdminClient.subscriptionCallable
         .futureCall(
           GetSubscriptionRequest.newBuilder()
-            .setSubscription(subscriptionName(subscriptionName.value, projectId.value).toString())
+            .setSubscription(subscriptionId.toSubscriptionName(projectId).toString())
             .build()
         )
         .await()

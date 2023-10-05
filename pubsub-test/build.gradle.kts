@@ -23,14 +23,15 @@ spotless {
   }
 }
 
+tasks.withType<Test> {
+  useJUnitPlatform()
+}
+
 kotlin { explicitApi() }
 
 dependencies {
-  implementation(kotlin("stdlib"))
-  api(libs.coroutines)
-  api(libs.pubsub)
-  api(projects.googleCommonApi)
-
-  testImplementation(kotlin("test"))
-  testImplementation(projects.gcpPubsubTest)
+  api(projects.gcpPubsubKtor)
+  api(libs.ktor.server)
+  api(libs.testcontainers.gcloud)
+  api(libs.testcontainers)
 }

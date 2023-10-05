@@ -8,14 +8,14 @@ import io.github.nomisrev.gcp.core.await
 import java.nio.ByteBuffer
 import java.util.concurrent.ConcurrentHashMap
 
-public fun GcpPublisher(
-  projectId: ProjectId,
-  configure: Publisher.Builder.(topicId: TopicId) -> Unit
-): GcpPublisher = DefaultGcpPublisher(projectId, configure)
-
 public interface MessageEncoder<A> {
   public suspend fun encode(value: A): PubsubMessage
 }
+
+public fun GcpPublisher(
+  projectId: ProjectId,
+  configure: Publisher.Builder.(topicId: TopicId) -> Unit = {}
+): GcpPublisher = DefaultGcpPublisher(projectId, configure)
 
 public interface GcpPublisher : AutoCloseable {
   public suspend fun publish(topicId: TopicId, message: PubsubMessage): String
@@ -136,7 +136,7 @@ private class DefaultGcpPublisher(
   fun getOrCreatePublisher(topicId: TopicId): Publisher =
     publisherCache[topicId]
       ?: publisherCache.computeIfAbsent(topicId) {
-        Publisher.newBuilder(projectTopicName(topicId.value, projectId.value))
+        Publisher.newBuilder(topicId.toProjectTopicName(projectId))
           .apply { configure(topicId) }
           .build()
       }

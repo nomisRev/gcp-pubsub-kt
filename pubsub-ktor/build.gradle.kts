@@ -26,11 +26,9 @@ spotless {
 kotlin { explicitApi() }
 
 dependencies {
-  implementation(kotlin("stdlib"))
-  api(libs.coroutines)
-  api(libs.pubsub)
-  api(projects.googleCommonApi)
+  api(projects.gcpPubsub)
+  api(libs.ktor.server)
 
-  testImplementation(kotlin("test"))
+  testImplementation(libs.ktor.test)
   testImplementation(projects.gcpPubsubTest)
 }

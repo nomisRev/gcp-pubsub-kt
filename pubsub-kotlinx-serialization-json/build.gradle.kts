@@ -4,6 +4,7 @@ plugins {
   id(libs.plugins.kover.get().pluginId)
   alias(libs.plugins.spotless)
   alias(libs.plugins.knit)
+  kotlin("plugin.serialization") version "1.9.0"
 }
 
 repositories {
@@ -26,10 +27,9 @@ spotless {
 kotlin { explicitApi() }
 
 dependencies {
-  implementation(kotlin("stdlib"))
-  api(libs.coroutines)
-  api(libs.pubsub)
-  api(projects.googleCommonApi)
+  api(kotlin("stdlib"))
+  api(projects.gcpPubsub)
+  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
   testImplementation(kotlin("test"))
   testImplementation(projects.gcpPubsubTest)
