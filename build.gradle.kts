@@ -1,27 +1,49 @@
-plugins {
-  kotlin("jvm") version "1.7.21"
-  id("io.kotest.multiplatform") version "5.5.4"
-}
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+plugins {
+  base
+  alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.kotest.multiplatform)
+  alias(libs.plugins.dokka)
+  alias(libs.plugins.kover)
+  alias(libs.plugins.publish)
+  alias(libs.plugins.knit)
+  alias(libs.plugins.spotless)
+}
 
 repositories {
   mavenCentral()
 }
 
-tasks.withType<Test> {
-  useJUnitPlatform()
-}
+subprojects {
+  group = "io.github.nomisrev"
 
-dependencies {
-  implementation(kotlin("stdlib"))
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-  implementation("com.google.cloud:google-cloud-pubsub:1.122.1")
+  this@subprojects.tasks.withType<DokkaTaskPartial>().configureEach {
+    this@subprojects.extensions.findByType<KotlinProjectExtension>()?.sourceSets?.forEach { kotlinSourceSet ->
+      dokkaSourceSets.named(kotlinSourceSet.name) {
+        includes.from("README.MD")
+        perPackageOption {
+          matchingRegex.set(".*\\.internal.*")
+          suppress.set(true)
+        }
+        externalDocumentationLink("https://kotlinlang.org/api/kotlinx.coroutines/")
+        skipDeprecated.set(true)
+        reportUndocumented.set(false)
+        val baseUrl: String = checkNotNull(properties["pom.smc.url"]?.toString())
 
-  testImplementation("io.arrow-kt:arrow-fx-coroutines:1.1.3")
-  testImplementation("io.kotest:kotest-property:5.5.4")
-  testImplementation("io.kotest:kotest-assertions-core:5.5.4")
-  testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
-  testImplementation("org.testcontainers:gcloud:1.17.6")
+        kotlinSourceSet.kotlin.srcDirs.filter { it.exists() }.forEach { srcDir ->
+          sourceLink {
+            localDirectory.set(srcDir)
+            remoteUrl.set(uri("$baseUrl/blob/main/${srcDir.relativeTo(rootProject.rootDir)}").toURL())
+            remoteLineSuffix.set("#L")
+          }
+        }
+      }
+    }
+  }
+
+  tasks.withType<AbstractPublishToMaven> {
+    dependsOn(tasks.withType<Sign>())
+  }
 }

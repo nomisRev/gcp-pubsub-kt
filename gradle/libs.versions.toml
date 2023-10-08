@@ -1,0 +1,41 @@
+[versions]
+coroutines = "1.7.0"
+dokka = "1.8.10"
+kotlin = "1.9.10"
+kotest = "5.5.4"
+kotest-plugin = "5.5.5"
+kover = "0.6.1"
+detekt = "1.22.0"
+kotlinx-knit="0.4.0"
+ktor = "2.3.0"
+pubsub = "1.123.6"
+gcloud = "1.17.6"
+publish="0.25.3"
+knit="0.4.0"
+spotless="6.22.0"
+google-api="2.17.1"
+logback = "1.4.11"
+
+[libraries]
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-framework = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinx-knit-test = { module = "org.jetbrains.kotlinx:kotlinx-knit-test", version.ref = "kotlinx-knit" }
+ktor-server = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-test = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+pubsub = { module = "com.google.cloud:google-cloud-pubsub", version.ref = "pubsub" }
+google-api = { module = "com.google.api:api-common", version.ref = "google-api" }
+testcontainers-gcloud = { module = "org.testcontainers:gcloud", version.ref = "gcloud" }
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "gcloud" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+[plugins]
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest-plugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+publish = { id = "com.vanniktech.maven.publish", version.ref="publish" }
+knit = { id = "org.jetbrains.kotlinx.knit", version.ref="knit" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

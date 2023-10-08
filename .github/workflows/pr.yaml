@@ -1,12 +1,10 @@
-name: "Build"
+name: "Build main"
 
 on:
-  push:
+  pull_request:
     paths-ignore:
       - 'docs/**'
       - '*.md'
-    branches:
-      - main
 
 jobs:
   check:
