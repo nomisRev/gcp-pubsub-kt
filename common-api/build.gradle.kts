@@ -3,6 +3,7 @@ plugins {
   id(libs.plugins.dokka.get().pluginId)
   id(libs.plugins.kover.get().pluginId)
   alias(libs.plugins.knit)
+  alias(libs.plugins.publish)
 }
 
 repositories {

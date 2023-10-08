@@ -4,6 +4,7 @@ plugins {
   id(libs.plugins.kover.get().pluginId)
   alias(libs.plugins.spotless)
   alias(libs.plugins.knit)
+  alias(libs.plugins.publish)
   kotlin("plugin.serialization") version "1.9.0"
 }
 

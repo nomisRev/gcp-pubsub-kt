@@ -54,6 +54,8 @@ class GcpPluginTest {
     }
 
   companion object {
-    @JvmStatic @get:ClassRule val pubSubEmulator = PubSubEmulator()
+    @JvmStatic
+    @get:ClassRule
+    val pubSubEmulator = PubSubEmulator()
   }
 }
