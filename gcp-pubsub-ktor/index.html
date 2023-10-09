@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>gcp-pubsub-ktor</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../index.html">
+<span>kotlin-gcp-pubsub</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gcp-pubsub-ktor:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="gcp-pubsub-ktor::////PointingToDeclaration//1357415933">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>gcp-pubsub-ktor</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gcp-pubsub-ktor:dokkaHtmlPartial/main"><p class="paragraph">Ktor plugin offering convenient way of working with GCP PubSub, it offers a simplified way of configuring Gcp PubSub and automatically takes care of lifecycle to match lifecycle of the Ktor Application.</p><p class="paragraph">Simply <code class="lang-kotlin">install</code> the plugin into Ktor Application, and set up the desired configuration.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">fun Application.setup(): GcpPubSub =<br>  install(GcpPubSub) {<br>    // all configuration is optional<br>    credentialsProvider = GoogleCredentials.fromStream(FileInputStream(PATH_TO_JSON_KEY))<br>    subscriber { /* configure subscriber */ }<br>    publisher { /* configure publisher */ }<br>    topicAdmin { /* configure topic admin */ }<br>    subscriptionAdmin { /* configure subscription admin */ }<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">After you've installed the <code class="lang-kotlin">GcpPubSub</code> plugin, and setup according the needs of your application simply open a <code class="lang-kotlin">pubSub</code> block inside the Ktor Application and you'll have access to all GcpPubSub functionality through the DSL.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">fun Application.setup(topic: TopicId, subscription: SubscriptionId): Job =<br>  pubSub(ProjectId("my-project")) {<br>    publish(topic, messages)<br><br>    subscribe(subscription) { record -&gt;<br>      println(record.message.data.toStringUtf8())<br>      record.ack()<br>    }<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">You can also easily access the <code class="lang-kotlin">GcpPubSub</code> plugin using the <code class="lang-kotlin">pubSub</code> function in case you need access to <code class="lang-kotlin">publisher</code> from a route, or different parts from your application.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">fun Application.route(): Routing =<br>  routing {<br>    post("/publish/{message}") {<br>      val message =<br>        requireNotNull(call.parameters["message"]) { "Missing parameter message" }<br>      pubSub().publisher(ProjectId("my-project"))<br>        .publish(TopicId("my-topic"), message)<br>      call.respond(HttpStatusCode.Accepted)<br>    }<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="-596166367%2FPackages%2F1357415933" anchor-label="io.github.nomisrev.gcp.pubsub.ktor" id="-596166367%2FPackages%2F1357415933" data-filterable-set=":gcp-pubsub-ktor:dokkaHtmlPartial/main"></a>
+    <div class="table-row" data-filterable-current=":gcp-pubsub-ktor:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub-ktor:dokkaHtmlPartial/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="io.github.nomisrev.gcp.pubsub.ktor/index.html">io.github.nomisrev.gcp.pubsub.ktor</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-596166367%2FPackages%2F1357415933"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>pubSub</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../index.html">
+<span>kotlin-gcp-pubsub</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gcp-pubsub-ktor:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageids="gcp-pubsub-ktor::io.github.nomisrev.gcp.pubsub.ktor//pubSub/io.ktor.server.application.Application#[Error type: Unresolved type for ProjectId]#kotlin.coroutines.SuspendFunction1[io.github.nomisrev.gcp.pubsub.ktor.GcpPubSubSyntax,kotlin.Unit]/PointingToDeclaration//1357415933">
+  <div class="breadcrumbs"><a href="../index.html">gcp-pubsub-ktor</a><span class="delimiter">/</span><a href="index.html">io.github.nomisrev.gcp.pubsub.ktor</a><span class="delimiter">/</span><span class="current">pubSub</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>pub</span><wbr><span><span>Sub</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gcp-pubsub-ktor:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span data-unresolved-link="io.ktor.server.application/Application///PointingToDeclaration/">Application</span><span class="token punctuation">.</span><a href="pub-sub.html"><span class="token function">pubSub</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">projectId<span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token keyword"></span><a href="-gcp-pub-sub-syntax/index.html">GcpPubSubSyntax</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html">Job</a></div><p class="paragraph">Retrieve the <a href="-gcp-pub-sub/index.html">GcpPubSub</a> plugin, and launch a coroutine that creates a Gcp PubSub based program using <a href="-gcp-pub-sub-syntax/index.html">GcpPubSubSyntax</a>. It gives access to all functions from GcpPubsSubAdmin&amp;GcpPublisher.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">fun Application.process(): Job =<br>  pubSub(projectId) {<br>    // Access all GcpPubSubAdmin functions<br>    createTopic(TopicId("my-topic"))<br>    createSubscription(SubscriptionId("my-subscription"), TopicId("my-topic"))<br><br>    // Access to all GcpPublisher functions<br>    publish(TopicId("my-topic"), listOf("my-message1", "my-message2"))<br><br>    subscribe(SubscriptionId("my-subscription")) { record -&gt;<br>      println(record.message.data.toStringUtf8())<br>      record.ack().<br>    }<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><hr><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><span data-unresolved-link="io.ktor.util.pipeline/PipelineContext///PointingToDeclaration/">PipelineContext</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span><span class="token keyword"></span><span data-unresolved-link="io.ktor.server.application/ApplicationCall///PointingToDeclaration/">ApplicationCall</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="pub-sub.html"><span class="token function">pubSub</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-gcp-pub-sub/index.html">GcpPubSub</a></div><p class="paragraph">Retrieve the GcpPubSub plugin, this allows access to the cached GcpPubsSubAdmin&amp;GcpPublisher instances</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">fun Application.route(): Routing =<br>  routing {<br>    post("/publish") {<br>      pubSub().publisher(ProjectId("my-project"))<br>        .publish(TopicId("my-topic"), "my-message")<br>      call.respond(HttpStatusCode.Accepted)<br>    }<br><br>    post("/delete/{topic}") {<br>      val topic =<br>        requireNotNull(call.parameters["topic"]) { "Missing parameter topic" }<br>      pubSub().admin(projectId).deleteTopic(TopicId(topic))<br>    }<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

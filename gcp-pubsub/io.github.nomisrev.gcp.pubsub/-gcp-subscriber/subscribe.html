@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>subscribe</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../../../index.html">
+<span>kotlin-gcp-pubsub</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gcp-pubsub:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageids="gcp-pubsub::io.github.nomisrev.gcp.pubsub/GcpSubscriber/subscribe/#io.github.nomisrev.gcp.pubsub.SubscriptionId#kotlin.Function1[com.google.cloud.pubsub.v1.Subscriber.Builder,kotlin.Unit]/PointingToDeclaration//1979073100">
+  <div class="breadcrumbs"><a href="../../index.html">gcp-pubsub</a><span class="delimiter">/</span><a href="../index.html">io.github.nomisrev.gcp.pubsub</a><span class="delimiter">/</span><a href="index.html">GcpSubscriber</a><span class="delimiter">/</span><span class="current">subscribe</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>subscribe</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gcp-pubsub:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="subscribe.html"><span class="token function">subscribe</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">subscriptionId<span class="token operator">: </span><a href="../-subscription-id/index.html">SubscriptionId</a><span class="token punctuation">, </span></span><span class="parameter ">configure<span class="token operator">: </span><span class="token keyword"></span><span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber.Builder///PointingToDeclaration/">Subscriber.Builder</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-pubsub-record/index.html">PubsubRecord</a><span class="token operator">&gt;</span></div><p class="paragraph">Basic implementation to subscribe to Google PubSub.</p><p class="paragraph"><code class="lang-kotlin">PubsubRecord</code> is offloaded into a <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html">Channel</a> with <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/-factory/-r-e-n-d-e-z-v-o-u-s.html">Channel.RENDEZVOUS</a>, and you can use <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/index.html">Flow.buffer</a> to increase the size of the <a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/index.html">Channel</a>, if you want to keep more message in memory before back-pressuring the <span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber///PointingToDeclaration/">Subscriber</span>.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val subscription = SubsriptionId("my-subscription")<br>val subscriber: GcpSubscriber = TODO("Create subscriber")<br>subscriber.subscribe(subscription)<br>  .collect { record -&gt;<br>    println("Processing - ${record.message.data.toStringUtf8()}")<br>    record.ack()<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph"><a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a> with the received <a href="../-pubsub-record/index.html">PubsubRecord</a>.</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":gcp-pubsub:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>subscription</span><wbr><span><span>Id</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the subscription you want to subscribe to</p></div></div></div></div><div class="table-row" data-filterable-current=":gcp-pubsub:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>configure</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the <span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber///PointingToDeclaration/">Subscriber</span> using <span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber.Builder///PointingToDeclaration/">Subscriber.Builder</span>. To deal with backpressure you can provide <span data-unresolved-link="com.google.api.gax.batching/FlowControlSettings///PointingToDeclaration/">FlowControlSettings</span>, which allows limiting how many messages subscribers pull. You can limit both the number of messages and the maximum size of messages held by the client at one time, to not overburden a single client. See <span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber///PointingToDeclaration/">Subscriber</span> for more details.</p></div></div></div></div></div><hr><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="subscribe.html">A</a><span class="token operator">&gt; </span><a href="subscribe.html"><span class="token function">subscribe</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">subscriptionId<span class="token operator">: </span><a href="../-subscription-id/index.html">SubscriptionId</a><span class="token punctuation">, </span></span><span class="parameter ">decoder<span class="token operator">: </span><a href="../-message-decoder/index.html">MessageDecoder</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="subscribe.html">A</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">configure<span class="token operator">: </span><span class="token keyword"></span><span data-unresolved-link="com.google.cloud.pubsub.v1/Subscriber.Builder///PointingToDeclaration/">Subscriber.Builder</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-flow/index.html">Flow</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-acknowledgeable-value/index.html">AcknowledgeableValue</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="subscribe.html">A</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><p class="paragraph">Utility variant that automatically decodes <a href="../-pubsub-record/index.html">PubsubRecord</a> into <a href="subscribe.html">A</a> using <a href="../-message-decoder/index.html">MessageDecoder</a>.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">data class Event(val key: String, val message: String)<br><br>val eventDecoder = object : MessageDecoder&lt;Event&gt; {<br>  override suspend fun decode(message: PubsubMessage): A =<br>    Event(message.key, message.data.toStringUtf8())<br>}<br><br>val subscription = SubsriptionId("my-subscription")<br>val subscriber: GcpSubscriber = TODO("Create subscriber")<br>subscriber.subscribe(subscription, eventDecoder)<br>  .collect { (event: Event, record: PubsubRecord) -&gt;<br>    println("event.key: ${event.key}, event.message: ${event.message}")<br>    record.ack()<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h4 class="">See also</h4><div class="table"><div class="table-row" data-filterable-current=":gcp-pubsub:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub:dokkaHtmlPartial/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="subscribe.html"><span>Gcp</span><wbr><span>Subscriber.</span><wbr><span>subscribe</span></a></div></span></div><div><div class="title"><p class="paragraph">for full documentation</p></div></div></div></div></div></div></div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

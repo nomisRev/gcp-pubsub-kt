@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>gcp-pubsub</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../index.html">
+<span>kotlin-gcp-pubsub</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gcp-pubsub:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="gcp-pubsub::////PointingToDeclaration//1979073100">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>gcp-pubsub</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gcp-pubsub:dokkaHtmlPartial/main"><p class="paragraph">KotlinX integration for <code class="lang-kotlin">TopicAdminClient</code>, <code class="lang-kotlin">SubscriptionAdminClient</code>, <code class="lang-kotlin">Susbcriber</code> and <code class="lang-kotlin">Publisher</code>.</p><p class="paragraph">This modules exposes following types that correspond to their relevant Gcp PubSub types but expose <code class="lang-kotlin">suspend</code> APIs, that await the operations in a suspending way.</p><table><thead><tr><th><strong>Name</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td>#GcpPublisher</td><td>Exposes <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">publish</code> methods, and automatically caches the <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">Publisher</code> under-the-hood for optimal performance. All <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">publish</code> methods suspend until all methods are published to the topic.</td></tr><tr><td>#GcpPubSubAdmin</td><td>Combines the API of <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">TopicAdminClient</code> and <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">SubscriptionAdminClient</code>, and awaits the succesfully result of their operations in a suspending way.</td></tr><tr><td>#GcpSubscriber</td><td>Exposes a single <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">subscribe</code> method that subscribes to PubSub and exposes the stream of messages as a KotlinX Flow.</td></tr><tr><td>GcpPull</td><td>Exposes a single <code class="org.jetbrains.dokka.pages.commenttable@233f1832 lang-kotlin">pull</code> method that pulls messages from PubSub in a back-pressured way.</td></tr></tbody></table><h2 class=""> Examples</h2><p class="paragraph">All types can be created using the <code class="lang-kotlin">ProjectId</code>, and a configuration lambda using the original <code class="lang-kotlin">Builder</code> types from Google's Java lib so the original documentation and techniques apply. It keeps the original default settings, see all the examples below.</p><h3 class=""> GcpPublisher</h3><p class="paragraph">Configuring the <code class="lang-kotlin">GcpPublisher</code> can conveniently be done using the lambda using the Google <code class="lang-kotlin">Publisher.Builder</code> API. The <code class="lang-kotlin">GcpPublisher</code> type implements <code class="lang-kotlin">AutoCloseable</code> so most conveniently you can consume it with <code class="lang-kotlin">use</code> from the Kotlin Std. Alternatively you could also use <code class="lang-kotlin">try/finally</code>, or similar strategies.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">GcpPublisher(ProjectId("my-project")).use { publisher -&gt;<br><br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Publishing messages from different types <code class="lang-kotlin">String</code>, <code class="lang-kotlin">ByteArray</code>, <code class="lang-kotlin">ByteBuffer</code>, <code class="lang-kotlin">ByteString</code> is support out-of-the-box, this can be done by providing a single value or an <code class="lang-kotlin">Iterable</code> of any of these types.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">publisher.publish(TopicId("my-topic"), "msg1")<br>publisher.publish(TopicId("my-topic"), listOf("msg2", "msg3"))<br>publisher.publish(TopicId("my-topic"), "msg1".toByteArray())</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">You can also publish custom types, but need to provide a <code class="lang-kotlin">MessageEncoder&lt;A&gt;</code>. See ../pubsub-kotlinx-serialization-json/README.MD on how to publish messages using <code class="lang-kotlin">Json</code> with KotlinX Serialization.</p><p class="paragraph">If you want to implement your own serializers, you can use the <code class="lang-kotlin">MessageEncoder</code> interface.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">data class MyEvent(val key: String, val message: String)<br><br>object MyEventEncoder : MessageEncoder&lt;MyEvent&gt; {<br>  override suspend fun encode(value: MyEvent): PubsubMessage =<br>    PubsubMessage.newBuilder()<br>      .setData(ByteString.copyFromUtf8(value.message))<br>      .setOrderingKey(value.key)<br>      .build()<br>}<br><br>publisher.publish(TopicId("my-topic"), MyEvent("key", "msg1"), MessageEncoder)<br>publisher.publish(TopicId("my-topic"), listOf(MyEvent("key", "msg2"), MyEvent("key", "msg3")), MessageEncoder)</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class=""> GcpPubSubAdmin</h3><p class="paragraph">Configuring the <code class="lang-kotlin">GcpPubSubAdmin</code> can conveniently be done by any of the overloads, it wraps both <code class="lang-kotlin">TopicAdminClient</code> and <code class="lang-kotlin">SubscriptionAdminClient</code>. You can manually construct both, and pass them into the constructor, remember that you need to close both <code class="lang-kotlin">TopicAdmintClient</code> and <code class="lang-kotlin">SubscriptionAdminClient</code> so you can either use <code class="lang-kotlin">use</code> or manually close <code class="lang-kotlin">TopicAdminClient</code> and <code class="lang-kotlin">SubscriptionAdminClient</code>.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val topicAdminClient: TopicAdmintClient = TODO("Create TopicAdmintClient")<br>val subscriptionAdminClient: SubscriptionAdminClient = TODO("Create SubscriptionAdminClient")<br>GcpPubsSubAdmin(<br>  ProjectId("my-project"),<br>  topicAdminClient,<br>  subscriptionAdminClient<br>).use { admin -&gt;<br><br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Or, there is also the option to rely on the lambdas to configure the <code class="lang-kotlin">TopicAdminSettings.Builder</code> and <code class="lang-kotlin">SubscriptionAdminSettings.Builder</code>.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val credentials = GoogleCredentials.fromStream(FileInputStream(PATH_TO_JSON_KEY))<br><br>GcpPubsSubAdmin(<br>  ProjectId("my-project"),<br>  configureSubscriptionAdmin = { setCredentialsProvider(credentials) },<br>  configureTopicAdmin = { setCredentialsProvider(credentials) }<br>).use { admin -&gt;<br><br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Once the admin is created we can use all of its convenient <code class="lang-kotlin">suspend</code> functions.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">GcpPubsSubAdmin(ProjectId("my-project")).use { admin -&gt;<br>  admin.createTopic(TopicId("my-topic"))<br>  admin.createSubscription(Subsriptionid("my-subscription"), TopicId("my-topic"))<br>  // delete, get or list topics and subscriptions<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class=""> GcpSubscriber</h3><p class="paragraph">The <code class="lang-kotlin">GcpSubscriber</code> can easily be created by just providing a <code class="lang-kotlin">ProjectId</code>, since a new Subscriber will be created for every subscribe call that is made. Optionally, a common <code class="lang-kotlin">configure</code> lambda can be provided for configuration that is common for all Subscriber instances. <code class="lang-kotlin">GcpSubscriber</code> doesn't implement <code class="lang-kotlin">AutoCloseable</code> as it internally takes care of the lifecycles of the created Subscriber.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val subscriber = GcpSubscriber(ProjectId("my-project"))<br><br>val subscriber2 = GcpSubscriber(ProjectId("my-project")) {<br>  setCredentialsProvider(GoogleCredentials.fromStream(FileInputStream(PATH_TO_JSON_KEY)))<br>  setParallelPullCount(3)<br>  setMaxDurationPerAckExtension(Duration.ofMinutes(60))<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Then we can simply call the <code class="lang-kotlin">subscribe</code> method, of which two simple variants exist to subscribe to a given SubscriptionId.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val subscription = SubsriptionId("my-subscription")<br>val subscriber: GcpSubscriber = TODO("Create subscriber")<br>subscriber.subscribe(subscription)<br>  .collect { record -&gt;<br>    println("Processing - ${record.message.data.toStringUtf8()}")<br>    record.ack()<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">There is also a variant that takes a <code class="lang-kotlin">MessageDecoder</code> in case you want to process decoded messages of <code class="lang-kotlin">A</code>.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">data class Event(val key: String, val message: String)<br><br>val eventDecoder = object : MessageDecoder&lt;Event&gt; {<br>  override suspend fun decode(message: PubsubMessage): A =<br>    Event(message.key, message.data.toStringUtf8())<br>}<br><br>val subscription = SubsriptionId("my-subscription")<br>val subscriber: GcpSubscriber = TODO("Create subscriber")<br>subscriber.subscribe(subscription, eventDecoder)<br>  .collect { (event: Event, record: PubsubRecord) -&gt;<br>    println("event.key: ${event.key}, event.message: ${event.message}")<br>    record.ack()<br>  }</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h2 class=""> Using in your projects</h2><h3 class=""> Gradle</h3><p class="paragraph">Add dependencies (you can also add other modules that you need):</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">dependencies {<br>  implementation("io.github.nomisrev:gcp-pubsub:1.0.0")<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class=""> Maven</h3><p class="paragraph">Add dependencies (you can also add other modules that you need):</p><div class="sample-container"><pre><code class="block lang-xml" theme="idea">&lt;dependency&gt;<br>    &lt;groupId&gt;io.github.nomisrev&lt;/groupId&gt;<br>    &lt;artifactId&gt;gcp-pubsub&lt;/artifactId&gt;<br>    &lt;version&gt;1.0.0&lt;/version&gt;<br>&lt;/dependency&gt;</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="2055742269%2FPackages%2F1979073100" anchor-label="io.github.nomisrev.gcp.pubsub" id="2055742269%2FPackages%2F1979073100" data-filterable-set=":gcp-pubsub:dokkaHtmlPartial/main"></a>
+    <div class="table-row" data-filterable-current=":gcp-pubsub:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub:dokkaHtmlPartial/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="io.github.nomisrev.gcp.pubsub/index.html">io.github.nomisrev.gcp.pubsub</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2055742269%2FPackages%2F1979073100"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

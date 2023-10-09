@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>gcp-pubsub-test</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+<a href="../index.html">
+<span>kotlin-gcp-pubsub</span>            </a>    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":gcp-pubsub-test:dokkaHtmlPartial/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" id="content" pageids="gcp-pubsub-test::////PointingToDeclaration//-1983415497">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>gcp-pubsub-test</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":gcp-pubsub-test:dokkaHtmlPartial/main"><p class="paragraph">Testing module build on top of testcontainers for Gcp PubSub exist out of a single type <code class="lang-kotlin">PubSubEmulator</code>, it implements <code class="lang-kotlin">AutoCloseable</code>, and <code class="lang-kotlin">Startable</code> for the underlying testcontainers.</p><p class="paragraph">In addition to <code class="lang-kotlin">ExternalResource</code> such that you can easily use it with JUnit's <code class="lang-kotlin">ClassRule</code> and <code class="lang-kotlin">Rule</code>, and it's also a Ktor Plugin such that you can easily install it in your <code class="lang-kotlin">testApplication</code> and all configuration is done for you.</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">class GcpPluginTest {<br>  val projectId = ProjectId("my-project-id")<br><br>  @Test<br>  fun emulatorTest() = runBlocking(Default) {<br>    val topic = emulator.uniqueTopic()<br>    val subscription = emulator.uniqueSubscription()<br>    val messages = (1..3).map { "$it" }<br>    val channel = Channel&lt;String&gt;(3)<br>    <br>    testApplication {<br>      install(emulator)<br>      <br>      application {<br>        pubSub(projectId) {<br>          createTopic(topic)<br>          createSubscription(subscription, topic)<br>          launch { publish(topic, messages) }<br>          <br>          subscribe(subscription) { record -&gt;<br>            record.ack().await()<br>            channel.send(record.message.data.toStringUtf8())<br>          }<br>        }<br>      }.also { startApplication() }<br>      <br>      assertEquals(messages.toSet(), channel.consumeAsFlow().take(3).toSet())<br>    }<br>  }<br>  <br>  companion object {<br>    @JvmStatic<br>    @get:ClassRule<br>    val emulator = PubSubEmulator()<br>  }<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h2 class=""> Using in your projects</h2><h3 class=""> Gradle</h3><p class="paragraph">Add dependencies (you can also add other modules that you need):</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">dependencies {<br>  testImplementation("io.github.nomisrev:gcp-pubsub-test:1.0.0")<br>}</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><h3 class=""> Maven</h3><p class="paragraph">Add dependencies (you can also add other modules that you need):</p><div class="sample-container"><pre><code class="block lang-xml" theme="idea">&lt;dependency&gt;<br>    &lt;groupId&gt;io.github.nomisrev&lt;/groupId&gt;<br>    &lt;artifactId&gt;gcp-pubsub-test&lt;/artifactId&gt;<br>    &lt;version&gt;1.0.0&lt;/version&gt;<br>    &lt;scope&gt;test&lt;/scope&gt;<br>&lt;/dependency&gt;</code></pre><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="-1396630233%2FPackages%2F-1983415497" anchor-label="io.github.nomisrev.gcp.pubsub.test" id="-1396630233%2FPackages%2F-1983415497" data-filterable-set=":gcp-pubsub-test:dokkaHtmlPartial/main"></a>
+    <div class="table-row" data-filterable-current=":gcp-pubsub-test:dokkaHtmlPartial/main" data-filterable-set=":gcp-pubsub-test:dokkaHtmlPartial/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="io.github.nomisrev.gcp.pubsub.test/index.html">io.github.nomisrev.gcp.pubsub.test</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1396630233%2FPackages%2F-1983415497"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
+

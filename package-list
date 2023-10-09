@@ -1,0 +1,15 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:gcp-pubsub
+io.github.nomisrev.gcp.pubsub
+module:gcp-pubsub-kotlinx-serialization-json
+io.github.nomisrev.gcp.pubsub.serialization
+module:gcp-pubsub-ktor
+io.github.nomisrev.gcp.pubsub.ktor
+module:gcp-pubsub-ktor-kotlinx-serialization-json
+io.github.nomisrev.gcp.pubsub.ktor.serialization
+module:gcp-pubsub-test
+io.github.nomisrev.gcp.pubsub.test
+module:google-common-api
+io.github.nomisrev.gcp.core
