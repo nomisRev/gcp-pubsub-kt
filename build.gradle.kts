@@ -17,8 +17,6 @@ repositories {
 }
 
 subprojects {
-  group = "io.github.nomisrev"
-
   this@subprojects.tasks.withType<DokkaTaskPartial>().configureEach {
     this@subprojects.extensions.findByType<KotlinProjectExtension>()?.sourceSets?.forEach { kotlinSourceSet ->
       dokkaSourceSets.named(kotlinSourceSet.name) {
