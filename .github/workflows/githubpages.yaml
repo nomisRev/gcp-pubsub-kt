@@ -3,6 +3,13 @@ name: githubpages
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    branches: [main]
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
 
 jobs:
   githubpages:
@@ -16,7 +23,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: -Pversion=${{ github.event.release.tag_name }} dokkaHtml
+          arguments: -Pversion=${{ github.event.release.tag_name }} dokkaHtmlMultiModule
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
