@@ -25,7 +25,7 @@ class PubSubTest {
     val actual = assertThrows<InvalidArgumentException> { admin.createTopic(TopicId("")) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [topics] name: (name=projects/my-project-id/topics/)"
+      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [topics] name: (name=projects/my-project-id/topics/)",
     )
   }
 
@@ -36,7 +36,7 @@ class PubSubTest {
     val actual = assertThrows<AlreadyExistsException> { admin.createTopic(topicId) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: ALREADY_EXISTS: Topic already exists"
+      "io.grpc.StatusRuntimeException: ALREADY_EXISTS: Topic already exists",
     )
   }
 
@@ -45,7 +45,7 @@ class PubSubTest {
     val actual = assertThrows<InvalidArgumentException> { admin.deleteTopic(TopicId("")) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [topics] name: (name=projects/my-project-id/topics/)"
+      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [topics] name: (name=projects/my-project-id/topics/)",
     )
   }
 
@@ -66,7 +66,7 @@ class PubSubTest {
       }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [subscriptions] name: (name=projects/my-project-id/subscriptions/)"
+      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [subscriptions] name: (name=projects/my-project-id/subscriptions/)",
     )
   }
 
@@ -78,7 +78,7 @@ class PubSubTest {
       assertThrows<NotFoundException> { admin.createSubscription(subscriptionId, topicId) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: NOT_FOUND: Subscription topic does not exist"
+      "io.grpc.StatusRuntimeException: NOT_FOUND: Subscription topic does not exist",
     )
   }
 
@@ -92,7 +92,7 @@ class PubSubTest {
       assertThrows<AlreadyExistsException> { admin.createSubscription(subscriptionId, topicId) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: ALREADY_EXISTS: Subscription already exists"
+      "io.grpc.StatusRuntimeException: ALREADY_EXISTS: Subscription already exists",
     )
   }
 
@@ -102,7 +102,7 @@ class PubSubTest {
       assertThrows<InvalidArgumentException> { admin.deleteSubscription(SubscriptionId("")) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [subscriptions] name: (name=projects/my-project-id/subscriptions/)"
+      "io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Invalid [subscriptions] name: (name=projects/my-project-id/subscriptions/)",
     )
   }
 
@@ -112,7 +112,7 @@ class PubSubTest {
     val actual = assertThrows<NotFoundException> { admin.deleteSubscription(subscriptionId) }
     assertEquals(
       actual.message,
-      "io.grpc.StatusRuntimeException: NOT_FOUND: Subscription does not exist"
+      "io.grpc.StatusRuntimeException: NOT_FOUND: Subscription does not exist",
     )
   }
 
@@ -131,7 +131,7 @@ class PubSubTest {
       }
     assertEquals(
       actual.message,
-      "com.google.api.gax.rpc.NotFoundException: io.grpc.StatusRuntimeException: NOT_FOUND: Subscription does not exist (resource=non-existing)"
+      "com.google.api.gax.rpc.NotFoundException: io.grpc.StatusRuntimeException: NOT_FOUND: Subscription does not exist (resource=non-existing)",
     )
   }
 
@@ -221,6 +221,6 @@ inline fun <reified T : Throwable> assertThrows(executable: () -> Unit): T =
     else ->
       throw AssertionError(
         "Expected ${T::class.simpleName} to be thrown, but found ${exception::class.simpleName}",
-        exception
+        exception,
       )
   }

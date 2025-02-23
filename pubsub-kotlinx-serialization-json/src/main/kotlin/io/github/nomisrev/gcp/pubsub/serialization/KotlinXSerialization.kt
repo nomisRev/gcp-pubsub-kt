@@ -24,7 +24,7 @@ import kotlinx.serialization.serializer
 public class KotlinXJsonEncoder<A>(
   private val stringFormat: StringFormat,
   private val serializer: KSerializer<A>,
-  private val configure: PubsubMessage.Builder.() -> Unit
+  private val configure: PubsubMessage.Builder.() -> Unit,
 ) : MessageEncoder<A> {
   override suspend fun encode(value: A): PubsubMessage =
     PubsubMessage.newBuilder()
@@ -39,7 +39,7 @@ public class KotlinXJsonEncoder<A>(
  */
 public class KotlinXJsonDecoder<A>(
   private val stringFormat: StringFormat,
-  private val serializer: KSerializer<A>
+  private val serializer: KSerializer<A>,
 ) : MessageDecoder<A> {
   override suspend fun decode(message: PubsubMessage): A =
     stringFormat.decodeFromString(serializer, message.data.toStringUtf8())
@@ -60,7 +60,7 @@ public suspend inline fun <reified A> GcpPublisher.publish(
   message: A,
   json: Json = Json,
   serializer: KSerializer<A> = serializer(),
-  noinline configure: PubsubMessage.Builder.() -> Unit = {}
+  noinline configure: PubsubMessage.Builder.() -> Unit = {},
 ): String = publish(topicId, message, KotlinXJsonEncoder(json, serializer, configure))
 
 /**
@@ -78,7 +78,7 @@ public suspend inline fun <reified A> GcpPublisher.publish(
   messages: Iterable<A>,
   json: Json = Json,
   serializer: KSerializer<A> = serializer(),
-  noinline configure: PubsubMessage.Builder.() -> Unit = {}
+  noinline configure: PubsubMessage.Builder.() -> Unit = {},
 ): List<String> = publish(topicId, messages, KotlinXJsonEncoder(json, serializer, configure))
 
 /**
@@ -103,7 +103,7 @@ public suspend inline fun <reified A> GcpPublisher.publish(
  */
 public inline fun <reified A> PubsubRecord.deserialized(
   json: Json = Json,
-  serializer: KSerializer<A> = serializer()
+  serializer: KSerializer<A> = serializer(),
 ): A = json.decodeFromString(serializer, data.toStringUtf8())
 
 /**

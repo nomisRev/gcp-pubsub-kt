@@ -36,7 +36,7 @@ import org.testcontainers.utility.DockerImageName
 public class PubSubEmulator(
   imageName: DockerImageName =
     DockerImageName.parse("gcr.io/google.com/cloudsdktool/cloud-sdk:316.0.0-emulators"),
-  private val credentials: CredentialsProvider = NoCredentialsProvider.create()
+  private val credentials: CredentialsProvider = NoCredentialsProvider.create(),
 ) : ExternalResource(), Startable, AutoCloseable, BaseApplicationPlugin<Application, Unit, Unit> {
 
   override val key: AttributeKey<Unit> = AttributeKey("PubSubEmulatorExtension")
@@ -86,7 +86,7 @@ public class PubSubEmulator(
   /** Create [TopicAdminSettings] that is by default linked to test channel. */
   public fun topicAdminSettings(
     transportChannelProvider: TransportChannelProvider = channel,
-    credentialsProvider: CredentialsProvider = credentials
+    credentialsProvider: CredentialsProvider = credentials,
   ): TopicAdminSettings =
     TopicAdminSettings.newBuilder()
       .setTransportChannelProvider(transportChannelProvider)
@@ -96,7 +96,7 @@ public class PubSubEmulator(
   /** Create [SubscriptionAdminSettings] that is by default linked to test channel. */
   public fun subscriptionAdminSettings(
     transportChannelProvider: TransportChannelProvider = channel,
-    credentialsProvider: CredentialsProvider = credentials
+    credentialsProvider: CredentialsProvider = credentials,
   ): SubscriptionAdminSettings =
     SubscriptionAdminSettings.newBuilder()
       .setTransportChannelProvider(transportChannelProvider)
@@ -112,7 +112,7 @@ public class PubSubEmulator(
 
   public fun subscriber(
     projectId: ProjectId,
-    configure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {}
+    configure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {},
   ): GcpSubscriber =
     GcpSubscriber(projectId) {
       configure(it)
@@ -122,7 +122,7 @@ public class PubSubEmulator(
 
   public fun publisher(
     projectId: ProjectId,
-    configure: Publisher.Builder.(topicId: TopicId) -> Unit = {}
+    configure: Publisher.Builder.(topicId: TopicId) -> Unit = {},
   ): GcpPublisher =
     GcpPublisher(projectId) {
       configure(it)
@@ -144,7 +144,7 @@ public class PubSubEmulator(
           .setTransportChannelProvider(channel)
           .setCredentialsProvider(credentials)
           .build()
-      )
+      ),
     )
 
   override fun before() {
