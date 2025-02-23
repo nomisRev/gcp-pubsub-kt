@@ -14,7 +14,7 @@ public interface MessageEncoder<A> {
 
 public fun GcpPublisher(
   projectId: ProjectId,
-  configure: Publisher.Builder.(topicId: TopicId) -> Unit = {}
+  configure: Publisher.Builder.(topicId: TopicId) -> Unit = {},
 ): GcpPublisher = DefaultGcpPublisher(projectId, configure)
 
 public interface GcpPublisher : AutoCloseable {
@@ -25,43 +25,43 @@ public interface GcpPublisher : AutoCloseable {
   public suspend fun <A> publish(
     topicId: TopicId,
     messages: Iterable<A>,
-    encoder: MessageEncoder<A>
+    encoder: MessageEncoder<A>,
   ): List<String> = publish(topicId, messages.map { encoder.encode(it) })
 
   public suspend fun publish(
     topicId: TopicId,
     message: ByteString,
-    configure: PubsubMessage.Builder.() -> Unit = {}
+    configure: PubsubMessage.Builder.() -> Unit = {},
   ): String = publish(topicId, PubsubMessage.newBuilder().setData(message).apply(configure).build())
 
   public suspend fun publish(
     topicId: TopicId,
     message: String,
-    configure: PubsubMessage.Builder.() -> Unit = {}
+    configure: PubsubMessage.Builder.() -> Unit = {},
   ): String =
     publish(
       topicId,
-      PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(message)).apply(configure).build()
+      PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(message)).apply(configure).build(),
     )
 
   public suspend fun publish(
     topicId: TopicId,
     message: ByteBuffer,
-    configure: PubsubMessage.Builder.() -> Unit = {}
+    configure: PubsubMessage.Builder.() -> Unit = {},
   ): String =
     publish(
       topicId,
-      PubsubMessage.newBuilder().setData(ByteString.copyFrom(message)).apply(configure).build()
+      PubsubMessage.newBuilder().setData(ByteString.copyFrom(message)).apply(configure).build(),
     )
 
   public suspend fun publish(
     topicId: TopicId,
     message: ByteArray,
-    configure: PubsubMessage.Builder.() -> Unit = {}
+    configure: PubsubMessage.Builder.() -> Unit = {},
   ): String =
     publish(
       topicId,
-      PubsubMessage.newBuilder().setData(ByteString.copyFrom(message)).apply(configure).build()
+      PubsubMessage.newBuilder().setData(ByteString.copyFrom(message)).apply(configure).build(),
     )
 
   public suspend fun <A> publish(topicId: TopicId, message: A, encoder: MessageEncoder<A>): String =
@@ -72,7 +72,7 @@ public interface GcpPublisher : AutoCloseable {
 public suspend fun GcpPublisher.publish(
   topicId: TopicId,
   messages: Iterable<ByteString>,
-  configure: PubsubMessage.Builder.() -> Unit = {}
+  configure: PubsubMessage.Builder.() -> Unit = {},
 ): List<String> =
   publish(topicId, messages.map { PubsubMessage.newBuilder().setData(it).apply(configure).build() })
 
@@ -80,44 +80,44 @@ public suspend fun GcpPublisher.publish(
 public suspend fun GcpPublisher.publish(
   topicId: TopicId,
   messages: Iterable<String>,
-  configure: PubsubMessage.Builder.() -> Unit = {}
+  configure: PubsubMessage.Builder.() -> Unit = {},
 ): List<String> =
   publish(
     topicId,
     messages.map {
       PubsubMessage.newBuilder().setData(ByteString.copyFromUtf8(it)).apply(configure).build()
-    }
+    },
   )
 
 @JvmName("publishByteBuffer")
 public suspend fun GcpPublisher.publish(
   topicId: TopicId,
   messages: Iterable<ByteBuffer>,
-  configure: PubsubMessage.Builder.() -> Unit = {}
+  configure: PubsubMessage.Builder.() -> Unit = {},
 ): List<String> =
   publish(
     topicId,
     messages.map {
       PubsubMessage.newBuilder().setData(ByteString.copyFrom(it)).apply(configure).build()
-    }
+    },
   )
 
 @JvmName("publishByteArray")
 public suspend fun GcpPublisher.publish(
   topicId: TopicId,
   messages: Iterable<ByteArray>,
-  configure: PubsubMessage.Builder.() -> Unit = {}
+  configure: PubsubMessage.Builder.() -> Unit = {},
 ): List<String> =
   publish(
     topicId,
     messages.map {
       PubsubMessage.newBuilder().setData(ByteString.copyFrom(it)).apply(configure).build()
-    }
+    },
   )
 
 private class DefaultGcpPublisher(
   val projectId: ProjectId,
-  val configure: Publisher.Builder.(topicId: TopicId) -> Unit
+  val configure: Publisher.Builder.(topicId: TopicId) -> Unit,
 ) : GcpPublisher {
   val publisherCache = ConcurrentHashMap<TopicId, Publisher>()
 

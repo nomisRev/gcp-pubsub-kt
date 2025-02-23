@@ -22,7 +22,7 @@ import io.github.nomisrev.gcp.core.await
 public fun GcpPubsSubAdmin(
   projectId: ProjectId,
   configureSubscriptionAdmin: SubscriptionAdminSettings.Builder.() -> Unit,
-  configureTopicAdmin: TopicAdminSettings.Builder.() -> Unit
+  configureTopicAdmin: TopicAdminSettings.Builder.() -> Unit,
 ): GcpPubsSubAdmin {
   val topicAdminClient =
     TopicAdminClient.create(TopicAdminSettings.newBuilder().apply(configureTopicAdmin).build())
@@ -99,7 +99,7 @@ public interface GcpPubsSubAdmin : AutoCloseable {
   public suspend fun createSubscription(
     subscriptionId: SubscriptionId,
     topicId: TopicId,
-    configure: Subscription.Builder.() -> Unit = {}
+    configure: Subscription.Builder.() -> Unit = {},
   ): Subscription
 
   /** Throws [NotFoundException] when subscription not found */
@@ -120,7 +120,7 @@ public interface GcpPubsSubAdmin : AutoCloseable {
 private class DefaultPubSubAdmin(
   val projectId: ProjectId,
   val topicAdminClient: TopicAdminClient,
-  val subscriptionAdminClient: SubscriptionAdminClient
+  val subscriptionAdminClient: SubscriptionAdminClient,
 ) : GcpPubsSubAdmin {
 
   override suspend fun createTopic(topicId: TopicId): Topic {
@@ -162,7 +162,7 @@ private class DefaultPubSubAdmin(
   override suspend fun createSubscription(
     subscriptionId: SubscriptionId,
     topicId: TopicId,
-    configure: Subscription.Builder.() -> Unit
+    configure: Subscription.Builder.() -> Unit,
   ): Subscription =
     subscriptionAdminClient
       .createSubscriptionCallable()

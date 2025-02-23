@@ -49,7 +49,7 @@ public inline fun <reified A> GcpPubSubSyntax.subscribe(
   json: Json = Json,
   serializer: KSerializer<A> = serializer(),
   noinline configure: Subscriber.Builder.() -> Unit = {},
-  noinline handler: suspend (AcknowledgeableValue<A>) -> Unit
+  noinline handler: suspend (AcknowledgeableValue<A>) -> Unit,
 ): Job =
   subscriber
     .subscribe(subscriptionId) { configure() }
@@ -59,7 +59,7 @@ public inline fun <reified A> GcpPubSubSyntax.subscribe(
           handler(
             AcknowledgeableValue(
               json.decodeFromString(serializer, record.message.data.toStringUtf8()),
-              record
+              record,
             )
           )
         )
@@ -75,5 +75,5 @@ public inline fun <reified A> GcpPubSubSyntax.subscribeDeserialized(
   json: Json = Json,
   serializer: KSerializer<A> = serializer(),
   noinline configure: Subscriber.Builder.() -> Unit = {},
-  noinline handler: suspend (AcknowledgeableValue<A>) -> Unit
+  noinline handler: suspend (AcknowledgeableValue<A>) -> Unit,
 ): Job = subscribe(subscriptionId, concurrency, context, json, serializer, configure, handler)

@@ -45,6 +45,6 @@ public interface GcpPubSubSyntax : GcpPubsSubAdmin, GcpPublisher, CoroutineScope
     concurrency: Int = DEFAULT_CONCURRENCY,
     context: CoroutineContext = Dispatchers.Default,
     configure: Subscriber.Builder.() -> Unit = {},
-    handler: suspend (PubsubRecord) -> Unit
+    handler: suspend (PubsubRecord) -> Unit,
   ): Job
 }

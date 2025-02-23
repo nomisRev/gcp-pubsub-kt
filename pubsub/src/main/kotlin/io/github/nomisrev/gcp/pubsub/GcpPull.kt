@@ -44,7 +44,7 @@ public interface GcpPull {
   public fun pull(
     subscription: SubscriptionId,
     maxMessages: Int = Int.MAX_VALUE,
-    configure: SubscriberStubSettings.Builder.() -> Unit = {}
+    configure: SubscriberStubSettings.Builder.() -> Unit = {},
   ): Flow<List<AckPubSubMessage>>
 }
 
@@ -52,7 +52,7 @@ private class DefaultGcpPull(val projectId: ProjectId) : GcpPull {
   override fun pull(
     subscription: SubscriptionId,
     maxMessages: Int,
-    configure: SubscriberStubSettings.Builder.() -> Unit
+    configure: SubscriberStubSettings.Builder.() -> Unit,
   ): Flow<List<AckPubSubMessage>> {
     val pullRequest: PullRequest =
       PullRequest.newBuilder()
@@ -79,14 +79,14 @@ private class DefaultGcpPull(val projectId: ProjectId) : GcpPull {
 
   private fun List<ReceivedMessage>.toAckPubSubMessage(
     subscriberStub: SubscriberStub,
-    subscription: SubscriptionId
+    subscription: SubscriptionId,
   ): List<AckPubSubMessage> = map { message ->
     DefaultAckPubSubMessage(projectId, subscription, message.message, message.ackId, subscriberStub)
   }
 
   private fun SubscriberStub.ack(
     subscriptionId: String,
-    ackIds: Collection<String>
+    ackIds: Collection<String>,
   ): Deferred<Empty> {
     val acknowledgeRequest =
       AcknowledgeRequest.newBuilder().addAllAckIds(ackIds).setSubscription(subscriptionId).build()
@@ -96,7 +96,7 @@ private class DefaultGcpPull(val projectId: ProjectId) : GcpPull {
   private fun SubscriberStub.modifyAckDeadline(
     subscriptionId: String,
     ackIds: Collection<String>,
-    ackDeadlineSeconds: Int
+    ackDeadlineSeconds: Int,
   ): Deferred<Empty> {
     val modifyAckDeadlineRequest =
       ModifyAckDeadlineRequest.newBuilder()

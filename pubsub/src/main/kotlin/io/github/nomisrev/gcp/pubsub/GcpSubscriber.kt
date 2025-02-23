@@ -20,7 +20,7 @@ public interface MessageDecoder<A> {
 
 public fun GcpSubscriber(
   projectId: ProjectId? = null,
-  configure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {}
+  configure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {},
 ): GcpSubscriber = DefaultGcpSubscriber(projectId, configure)
 
 public interface GcpSubscriber {
@@ -89,12 +89,12 @@ public interface GcpSubscriber {
 /** Default implementation build on top of Gcloud library */
 private class DefaultGcpSubscriber(
   val projectId: ProjectId?,
-  val globalConfigure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {}
+  val globalConfigure: Subscriber.Builder.(subscriptionId: SubscriptionId) -> Unit = {},
 ) : GcpSubscriber {
 
   override fun subscribe(
     subscriptionId: SubscriptionId,
-    configure: Subscriber.Builder.() -> Unit
+    configure: Subscriber.Builder.() -> Unit,
   ): Flow<PubsubRecord> =
     channelFlow {
         val projectSubscriptionName = subscriptionId.toProjectSubscriptionName(projectId)
@@ -110,7 +110,7 @@ private class DefaultGcpSubscriber(
                     message,
                     consumer,
                     ProjectId(projectSubscriptionName.project),
-                    subscriptionId
+                    subscriptionId,
                   )
                 )
                 .getOrThrow()
@@ -130,7 +130,7 @@ private class DefaultGcpSubscriber(
                   close(failure)
                 }
               },
-              MoreExecutors.directExecutor()
+              MoreExecutors.directExecutor(),
             )
           }
           .startAsync()

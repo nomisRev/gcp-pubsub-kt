@@ -15,15 +15,14 @@ import io.github.nomisrev.gcp.pubsub.PubsubRecord
 import io.github.nomisrev.gcp.pubsub.SubscriptionId
 import io.github.nomisrev.gcp.pubsub.TopicId
 import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.ApplicationStopped
 import io.ktor.server.application.BaseApplicationPlugin
 import io.ktor.server.application.application
 import io.ktor.server.application.install
 import io.ktor.server.application.pluginOrNull
+import io.ktor.server.routing.RoutingContext
 import io.ktor.util.AttributeKey
-import io.ktor.util.KtorDsl
-import io.ktor.util.pipeline.PipelineContext
+import io.ktor.utils.io.KtorDsl
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +73,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
                   this@GcpPubSub.credentialsProvider?.let { setCredentialsProvider(it) }
                 }
                 .build()
-            )
+            ),
           )
           .also { admin ->
             application.environment.monitor.subscribe(ApplicationStopped) { admin.close() }
@@ -108,7 +107,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
         concurrency: Int,
         context: CoroutineContext,
         configure: Subscriber.Builder.() -> Unit,
-        handler: suspend (PubsubRecord) -> Unit
+        handler: suspend (PubsubRecord) -> Unit,
       ): Job =
         subscriber
           .subscribe(subscriptionId) { configure() }
@@ -192,7 +191,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
 
     public override fun install(
       pipeline: Application,
-      configure: Configuration.() -> Unit
+      configure: Configuration.() -> Unit,
     ): GcpPubSub = GcpPubSub(pipeline, Configuration().apply(configure))
   }
 }
@@ -221,7 +220,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
  */
 public fun Application.pubSub(
   projectId: ProjectId,
-  block: suspend GcpPubSubSyntax.() -> Unit
+  block: suspend GcpPubSubSyntax.() -> Unit,
 ): Job {
   val plugin = pubSub()
   return launch { block(plugin.gcpPubSub(projectId, this)) }
@@ -248,6 +247,6 @@ public fun Application.pubSub(
  *   }
  * ```
  */
-public fun PipelineContext<Unit, ApplicationCall>.pubSub(): GcpPubSub = application.pubSub()
+public fun RoutingContext.pubSub(): GcpPubSub = call.application.pubSub()
 
 private fun Application.pubSub(): GcpPubSub = pluginOrNull(GcpPubSub) ?: install(GcpPubSub)
