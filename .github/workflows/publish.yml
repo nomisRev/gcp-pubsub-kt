@@ -25,23 +25,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 11
 
-      - uses: gradle/gradle-build-action@v2
+      - uses: gradle/gradle-build-action@v3
         with:
           arguments: assemble -Pversion=${{ inputs.version }}
 
       - name: Upload reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: 'reports-${{ matrix.os }}'
           path: '**/build/reports/**'
 
       - name: Publish final version
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: -Pversion=${{ inputs.version }} publishAllPublicationsToMavenCentralRepository
