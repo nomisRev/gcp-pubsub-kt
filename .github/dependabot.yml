@@ -5,9 +5,11 @@ updates:
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
+    auto-merge: true
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     rebase-strategy: "disabled"
+    auto-merge: true
