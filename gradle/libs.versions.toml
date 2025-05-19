@@ -12,7 +12,7 @@ gcloud = "1.20.5"
 publish="0.31.0"
 knit="0.5.0"
 spotless="7.0.3"
-google-api="2.17.1"
+google-api="2.49.0"
 logback = "1.4.11"
 
 [libraries]
