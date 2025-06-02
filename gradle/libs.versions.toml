@@ -11,7 +11,7 @@ pubsub = "1.139.4"
 gcloud = "1.20.5"
 publish="0.32.0"
 knit="0.5.0"
-spotless="7.0.3"
+spotless="7.0.4"
 google-api="2.49.0"
 logback = "1.4.11"
 
