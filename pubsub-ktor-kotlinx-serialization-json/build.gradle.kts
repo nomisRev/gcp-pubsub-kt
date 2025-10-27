@@ -5,7 +5,7 @@ plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.knit)
   alias(libs.plugins.publish)
-  kotlin("plugin.serialization") version "2.2.20"
+  kotlin("plugin.serialization") version "2.2.21"
 }
 
 repositories {
