@@ -31,7 +31,7 @@ dependencies {
   implementation(kotlin("stdlib"))
   api(projects.gcpPubsubKtor)
   api(projects.gcpPubsubKotlinxSerializationJson)
-  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
   testImplementation(kotlin("test"))
   testImplementation(libs.ktor.test)
