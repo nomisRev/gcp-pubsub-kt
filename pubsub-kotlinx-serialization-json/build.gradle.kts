@@ -30,7 +30,7 @@ kotlin { explicitApi() }
 dependencies {
   api(kotlin("stdlib"))
   api(projects.gcpPubsub)
-  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+  api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
   testImplementation(kotlin("test"))
   testImplementation(projects.gcpPubsubTest)
