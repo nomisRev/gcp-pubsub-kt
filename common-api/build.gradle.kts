@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
 
 plugins {
@@ -8,13 +9,17 @@ plugins {
   alias(libs.plugins.publish)
 }
 
-repositories {
-  mavenCentral()
+kotlin {
+  jvmToolchain(21)
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_11)
+  }
+  explicitApi()
 }
 
-configure<JavaPluginExtension> {
+java {
   toolchain {
-    languageVersion.set(JavaLanguageVersion.of(8))
+    languageVersion.set(JavaLanguageVersion.of(11))
   }
 }
 

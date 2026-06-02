@@ -1,5 +1,11 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+dependencyResolutionManagement {
+  repositories {
+    mavenCentral()
+  }
+}
+
 rootProject.name = "kotlin-gcp-pubsub"
 include("google-common-api")
 project(":google-common-api").projectDir = file("common-api")

@@ -5,7 +5,7 @@ kotlin = "2.3.21"
 kotest = "5.9.1"
 kover = "0.9.8"
 detekt = "1.23.8"
-kotlinx-knit="0.5.0"
+kotlinx-knit = "0.5.0"
 ktor = "3.5.0"
 pubsub = "1.146.0"
 gcloud = "1.21.4"
@@ -32,9 +32,8 @@ logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 [plugins]
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
-kotest-multiplatform = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-publish = { id = "com.vanniktech.maven.publish", version.ref="publish" }
-knit = { id = "org.jetbrains.kotlinx.knit", version.ref="knit" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
+knit = { id = "org.jetbrains.kotlinx.knit", version.ref = "knit" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
