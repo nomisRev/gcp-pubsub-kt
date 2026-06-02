@@ -26,6 +26,7 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.InternalForInheritanceCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -128,6 +129,7 @@ public fun <T> ApiFuture<T>.asDeferred(): Deferred<T> {
   // this is a no-op.
   deferred.invokeOnCompletion { cancel(false) }
   // Return hides the CompletableDeferred. This should prevent casting.
+  @OptIn(InternalForInheritanceCoroutinesApi::class)
   return object : Deferred<T> by deferred {}
 }
 

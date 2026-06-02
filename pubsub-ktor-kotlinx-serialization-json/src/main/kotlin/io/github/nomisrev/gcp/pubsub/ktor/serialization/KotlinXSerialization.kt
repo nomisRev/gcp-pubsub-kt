@@ -7,6 +7,7 @@ import io.github.nomisrev.gcp.pubsub.SubscriptionId
 import io.github.nomisrev.gcp.pubsub.ktor.GcpPubSubSyntax
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.DEFAULT_CONCURRENCY
@@ -41,7 +42,7 @@ import kotlinx.serialization.serializer
  *
  * @see GcpSubscriber.subscribe for full documentation.
  */
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
 public inline fun <reified A> GcpPubSubSyntax.subscribe(
   subscriptionId: SubscriptionId,
   concurrency: Int = DEFAULT_CONCURRENCY,
@@ -68,6 +69,7 @@ public inline fun <reified A> GcpPubSubSyntax.subscribe(
     .flattenMerge(concurrency)
     .launchIn(this@subscribe + context)
 
+@OptIn(FlowPreview::class)
 public inline fun <reified A> GcpPubSubSyntax.subscribeDeserialized(
   subscriptionId: SubscriptionId,
   concurrency: Int = DEFAULT_CONCURRENCY,

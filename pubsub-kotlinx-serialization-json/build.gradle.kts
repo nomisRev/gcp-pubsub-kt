@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
   id(libs.plugins.kotlin.jvm.get().pluginId)
   id(libs.plugins.dokka.get().pluginId)
@@ -34,4 +36,25 @@ dependencies {
 
   testImplementation(kotlin("test"))
   testImplementation(projects.gcpPubsubTest)
+}
+
+dokka {
+  dokkaSourceSets.configureEach {
+    includes.from("README.MD")
+    perPackageOption {
+      matchingRegex.set(".*\\.internal.*")
+      suppress.set(true)
+    }
+    externalDocumentationLinks.configureEach {
+      url("https://kotlinlang.org/api/kotlinx.coroutines/")
+    }
+    skipDeprecated.set(true)
+    reportUndocumented.set(false)
+
+    sourceLink {
+      localDirectory.set(file("src/main/kotlin"))
+      remoteUrl.set(URI("https://github.com/nomisRev/gcp-pubsub-kt/tree/main/pubsub-kotlinx-serialization-json/src"))
+      remoteLineSuffix.set("#L")
+    }
+  }
 }

@@ -1,3 +1,6 @@
+import java.net.URI
+import java.net.URL
+
 plugins {
   id(libs.plugins.kotlin.jvm.get().pluginId)
   id(libs.plugins.dokka.get().pluginId)
@@ -35,4 +38,25 @@ dependencies {
   api(libs.ktor.server)
   api(libs.testcontainers.gcloud)
   api(libs.testcontainers)
+}
+
+dokka {
+  dokkaSourceSets.configureEach {
+    includes.from("README.MD")
+    perPackageOption {
+      matchingRegex.set(".*\\.internal.*")
+      suppress.set(true)
+    }
+    externalDocumentationLinks.configureEach {
+      url("https://kotlinlang.org/api/kotlinx.coroutines/")
+    }
+    skipDeprecated.set(true)
+    reportUndocumented.set(false)
+
+    sourceLink {
+      localDirectory.set(file("src/main/kotlin"))
+      remoteUrl.set(URI("https://github.com/nomisRev/gcp-pubsub-kt/tree/main/pubsub-test/src"))
+      remoteLineSuffix.set("#L")
+    }
+  }
 }
