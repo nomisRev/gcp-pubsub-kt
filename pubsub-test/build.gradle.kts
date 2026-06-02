@@ -1,5 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
-import java.net.URL
 
 plugins {
   id(libs.plugins.kotlin.jvm.get().pluginId)
@@ -8,16 +8,6 @@ plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.knit)
   alias(libs.plugins.publish)
-}
-
-repositories {
-  mavenCentral()
-}
-
-configure<JavaPluginExtension> {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(8))
-  }
 }
 
 spotless {
@@ -31,7 +21,19 @@ tasks.withType<Test> {
   useJUnitPlatform()
 }
 
-kotlin { explicitApi() }
+kotlin {
+  jvmToolchain(21)
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_11)
+  }
+  explicitApi()
+}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+}
 
 dependencies {
   api(projects.gcpPubsubKtor)

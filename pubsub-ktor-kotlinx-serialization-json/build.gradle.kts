@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.net.URI
 
 plugins {
@@ -7,17 +8,7 @@ plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.knit)
   alias(libs.plugins.publish)
-  kotlin("plugin.serialization") version "2.3.21"
-}
-
-repositories {
-  mavenCentral()
-}
-
-configure<JavaPluginExtension> {
-  toolchain {
-    languageVersion.set(JavaLanguageVersion.of(8))
-  }
+  alias(libs.plugins.kotlin.serialization)
 }
 
 spotless {
@@ -27,7 +18,19 @@ spotless {
   }
 }
 
-kotlin { explicitApi() }
+kotlin {
+  jvmToolchain(21)
+  compilerOptions {
+    jvmTarget.set(JvmTarget.JVM_11)
+  }
+  explicitApi()
+}
+
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(11))
+  }
+}
 
 dependencies {
   implementation(kotlin("stdlib"))
