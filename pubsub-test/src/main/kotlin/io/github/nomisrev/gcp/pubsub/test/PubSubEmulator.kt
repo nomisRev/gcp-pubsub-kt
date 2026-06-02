@@ -26,8 +26,9 @@ import io.ktor.server.application.install
 import io.ktor.server.application.pluginOrNull
 import io.ktor.util.AttributeKey
 import java.time.Duration
-import java.util.UUID
 import java.util.concurrent.TimeUnit
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import org.junit.rules.ExternalResource
 import org.testcontainers.containers.PubSubEmulatorContainer
 import org.testcontainers.lifecycle.Startable
@@ -35,7 +36,7 @@ import org.testcontainers.utility.DockerImageName
 
 public class PubSubEmulator(
   imageName: DockerImageName =
-    DockerImageName.parse("gcr.io/google.com/cloudsdktool/cloud-sdk:316.0.0-emulators"),
+    DockerImageName.parse("gcr.io/google.com/cloudsdktool/cloud-sdk:570.0.0-emulators"),
   private val credentials: CredentialsProvider = NoCredentialsProvider.create(),
 ) : ExternalResource(), Startable, AutoCloseable, BaseApplicationPlugin<Application, Unit, Unit> {
 
@@ -104,11 +105,13 @@ public class PubSubEmulator(
       .build()
 
   /** Generate a unique topic name */
-  public fun uniqueTopic(): TopicId = TopicId("topic-${UUID.randomUUID()}")
+  @OptIn(ExperimentalUuidApi::class)
+  public fun uniqueTopic(): TopicId = TopicId("topic-${Uuid.generateV7()}")
 
   /** Generate a unique subscription name */
+  @OptIn(ExperimentalUuidApi::class)
   public fun uniqueSubscription(): SubscriptionId =
-    SubscriptionId("subscription-${UUID.randomUUID()}")
+    SubscriptionId("subscription-${Uuid.generateV7()}")
 
   public fun subscriber(
     projectId: ProjectId,

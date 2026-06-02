@@ -169,7 +169,7 @@ class PubSubTest {
     val topicId = extension.uniqueTopic()
     val subscriptionId = extension.uniqueSubscription()
     admin.createTopic(topicId)
-    admin.createSubscription(subscriptionId, topicId)
+    admin.createSubscription(subscriptionId, topicId) { setEnableMessageOrdering(true) }
 
     extension
       .publisher(projectId) { setEnableMessageOrdering(true) }

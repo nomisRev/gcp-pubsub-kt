@@ -75,9 +75,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
                 .build()
             ),
           )
-          .also { admin ->
-            application.environment.monitor.subscribe(ApplicationStopped) { admin.close() }
-          }
+          .also { admin -> application.monitor.subscribe(ApplicationStopped) { admin.close() } }
       }
 
   internal fun getOrCreatePublisher(projectId: ProjectId): GcpPublisher =
@@ -85,7 +83,7 @@ public class GcpPubSub(internal val application: Application, configuration: Con
       ?: publisherCache.computeIfAbsent(projectId) {
         GcpPublisher(projectId) { configurePublisher(projectId, it) }
           .also { publisher ->
-            application.environment.monitor.subscribe(ApplicationStopped) { publisher.close() }
+            application.monitor.subscribe(ApplicationStopped) { publisher.close() }
           }
       }
 
