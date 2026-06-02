@@ -49,9 +49,9 @@ Add dependencies (you can also add other modules that you need):
 
 ```kotlin
 dependencies {
-  implementation("io.github.nomisrev:gcp-pubsub-ktor:1.0.0")
-  implementation("io.github.nomisrev:gcp-pubsub-ktor-kotlinx-serialization-json:1.0.0")
-  testImplementation("io.github.nomisrev:gcp-pubsub-test:1.0.0")
+  implementation("io.github.nomisrev:kotlin-gcp-pubsub-ktor:1.0.0")
+  implementation("io.github.nomisrev:kotlin-gcp-pubsub-ktor-kotlinx-serialization-json:1.0.0")
+  testImplementation("io.github.nomisrev:kotlin-gcp-pubsub-test:1.0.0")
 }
 ```
 
@@ -63,7 +63,7 @@ Add dependencies (you can also add other modules that you need):
 
 <dependency>
     <groupId>io.github.nomisrev</groupId>
-    <artifactId>gcp-pubsub-ktor</artifactId>
+    <artifactId>kotlin-gcp-pubsub-ktor</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
