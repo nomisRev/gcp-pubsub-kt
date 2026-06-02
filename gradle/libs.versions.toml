@@ -1,7 +1,7 @@
 [versions]
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 dokka = "2.2.0"
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 kotest = "5.9.1"
 kover = "0.9.8"
 detekt = "1.23.8"
@@ -12,7 +12,7 @@ gcloud = "1.21.4"
 publish="0.36.0"
 knit="0.5.1"
 spotless="8.2.1"
-google-api="2.57.0"
+google-api="2.63.0"
 logback = "1.5.27"
 
 [libraries]
