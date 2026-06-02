@@ -44,4 +44,4 @@ jobs:
       - name: Publish final version
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: -Pversion=${{ inputs.version }} publishAllPublicationsToMavenCentralRepository
+          arguments: -Pversion=${{ inputs.version }} publishToMavenCentral
